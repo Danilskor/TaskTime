@@ -1,5 +1,9 @@
 import requests
-import init
+if __name__ == "__main__":
+    import os
+    import sys
+    root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+    sys.path.insert(0, root_path)
 from src import utils
 
 class YandexAuth:
@@ -57,6 +61,17 @@ class YandexAuth:
         print(f"Go to the following link for authorization:")
         print(f"{self.__auth_url}?response_type=code&client_id={self.__client_id}")
         return input("Enter the authorization code: ")
+    
+    def get_auth_url(self):
+        """
+        Returns the authorization URL.
+        Returns
+        -------
+        str
+            The authorization URL.
+        """
+        return f"{self.__auth_url}?response_type=code&client_id={self.__client_id}"
+        
 
     def get_access_token(self, auth_code):
         """
@@ -80,7 +95,6 @@ class YandexAuth:
         if response.status_code == 200:
             tokens = response.json()
             self.__access_token = tokens.get("access_token")
-            print(f"Access token: {self.__access_token}")
         else:
             print("Error getting token:", response.json())
 
